@@ -6,7 +6,7 @@ import math
 
 
 address = 0x68 # I2C of acc/gyro sensor
-sendRate = 20
+sendRate = 1
 
 sensor = mpu6050(address)
 # Set the accelerometer range:
@@ -81,10 +81,28 @@ class MotionPoller():
 if __name__ == '__main__':
     motp = MotionPoller()
     try:
-        # Start the threads
-        motp.start()
+        motp.run()
         a = datetime.datetime.now()
         print "Starting..."
+        while True:
+            b = datetime.datetime.now() - a
+            if b.total_seconds() >= sendRate:
+
+                print("\n\nAccelerometer Data [g]")
+                print("x: " + str(ACCx))
+                print("y: " + str(ACCy))
+                print("z: " + str(ACCz))
+
+                print("\nGyroscope Data")
+                print("x: " + str(GYRx))
+                print("y: " + str(GYRy))
+                print("z: " + str(GYRz))
+
+                print("\nTemp [C]: " + str(TEMP) + " C")
+
+                print("\n--------------------------")
+            a = datetime.datetime.now()
+
 
     except(KeyboardInterrupt, SystemExit):
         print "\nKilling Threads..."
