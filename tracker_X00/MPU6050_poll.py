@@ -78,7 +78,6 @@ class MotionPoller():
             # GYRr = math.sqrt(GYRx * GYRx + GYRy * GYRy + GYRz * GYRz)
 
 
-'''
 if __name__ == '__main__':
     motp = MotionPoller()
     try:
@@ -86,4 +85,7 @@ if __name__ == '__main__':
         motp.start()
         a = datetime.datetime.now()
         print "Starting..."
-'''
+
+    except(KeyboardInterrupt, SystemExit):
+        print "\nKilling Threads..."
+        motd = False
