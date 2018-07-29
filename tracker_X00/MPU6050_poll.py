@@ -8,20 +8,20 @@ import math
 address = 0x68 # I2C of acc/gyro sensor
 sendRate = 20
 
-motion_sensor = mpu6050(address)
+sensor = mpu6050(address)
 # Set the accelerometer range:
 # * ACCEL_RANGE_2G
 # * ACCEL_RANGE_4G
 # * ACCEL_RANGE_8G
 # * ACCEL_RANGE_16G
-motion_sensor.set_accel_range(mpu6050.ACCEL_RANGE_16G)
+sensor.set_accel_range(mpu6050.ACCEL_RANGE_16G)
 
 # Set the gyro range:
 # * GYRO_RANGE_250DEG
 # * GYRO_RANGE_500DEG
 # * GYRO_RANGE_1000DEG
 # * GYRO_RANGE_2000DEG
-motion_sensor.set_gyro_range(mpu6050.GYRO_RANGE_250DEG)
+sensor.set_gyro_range(mpu6050.GYRO_RANGE_250DEG)
 
 ## !!! Base these settings of the callibration, need to implement!!!
 # Magic Numbers
@@ -78,6 +78,7 @@ class MotionPoller():
             # GYRr = math.sqrt(GYRx * GYRx + GYRy * GYRy + GYRz * GYRz)
 
 
+'''
 if __name__ == '__main__':
     motp = MotionPoller()
     try:
@@ -85,3 +86,4 @@ if __name__ == '__main__':
         motp.start()
         a = datetime.datetime.now()
         print "Starting..."
+'''
