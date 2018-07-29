@@ -70,7 +70,7 @@ class MotionPoller():
             GYRz = gyro_data['z']
             ACCx = accel_data['x']
             ACCy = accel_data['y']
-            ACCz = accel_data]['z']
+            ACCz = accel_data['z']
             TEMP = temp
 
             # Normalize accelerometer raw values
