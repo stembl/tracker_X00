@@ -3,6 +3,7 @@
 from mpu6050 import mpu6050
 import datetime
 import math
+import sys
 
 
 address = 0x68 # I2C of acc/gyro sensor
@@ -88,19 +89,19 @@ if __name__ == '__main__':
             b = datetime.datetime.now() - a
             if b.total_seconds() >= sendRate:
 
-                print("\n\nAccelerometer Data [g]")
-                print("x: " + str(ACCx))
-                print("y: " + str(ACCy))
-                print("z: " + str(ACCz))
+                sys.stdout.write("\n\nAccelerometer Data [g]")
+                sys.stdout.write("x: " + str(ACCx))
+                sys.stdout.write("y: " + str(ACCy))
+                sys.stdout.write("z: " + str(ACCz))
 
-                print("\nGyroscope Data")
-                print("x: " + str(GYRx))
-                print("y: " + str(GYRy))
-                print("z: " + str(GYRz))
+                sys.stdout.write("\nGyroscope Data")
+                sys.stdout.write("x: " + str(GYRx))
+                sys.stdout.write("y: " + str(GYRy))
+                sys.stdout.write("z: " + str(GYRz))
 
-                print("\nTemp [C]: " + str(TEMP) + " C")
+                sys.stdout.write("\nTemp [C]: " + str(TEMP) + " C")
 
-                print("\n--------------------------")
+                sys.stdout.write("\n--------------------------")
             a = datetime.datetime.now()
 
 
