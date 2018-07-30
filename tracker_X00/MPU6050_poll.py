@@ -4,7 +4,7 @@ from mpu6050 import mpu6050
 import datetime
 import math
 import sys
-
+import threading
 
 address = 0x68 # I2C of acc/gyro sensor
 sendRate = 1
@@ -47,8 +47,9 @@ motd = None
 # 4. Filter and save results.
 
 # Thread to check motion values
-class MotionPoller():
+class MotionPoller(threading.Thread):
     def __init__(self):
+        threading.Thread.__init__(self)
         global motd
         self.current_value = None
         motd = True
@@ -82,29 +83,31 @@ class MotionPoller():
 if __name__ == '__main__':
     motp = MotionPoller()
     try:
-        motp.run()
+        motp.start()
         a = datetime.datetime.now()
         print "Starting..."
         while True:
             b = datetime.datetime.now() - a
             if b.total_seconds() >= sendRate:
 
-                sys.stdout.write("\n\nAccelerometer Data [g]")
-                sys.stdout.write("x: " + str(ACCx))
-                sys.stdout.write("y: " + str(ACCy))
-                sys.stdout.write("z: " + str(ACCz))
+                print("\n\nAccelerometer Data [g]")
+                print("x: " + str(ACCx))
+                print("y: " + str(ACCy))
+                print("z: " + str(ACCz))
 
-                sys.stdout.write("\nGyroscope Data")
-                sys.stdout.write("x: " + str(GYRx))
-                sys.stdout.write("y: " + str(GYRy))
-                sys.stdout.write("z: " + str(GYRz))
+                print("\nGyroscope Data")
+                print("x: " + str(GYRx))
+                print("y: " + str(GYRy))
+                print("z: " + str(GYRz))
 
-                sys.stdout.write("\nTemp [C]: " + str(TEMP) + " C")
+                print("\nTemp [C]: " + str(TEMP) + " C")
 
-                sys.stdout.write("\n--------------------------")
+                print("\n--------------------------")
             a = datetime.datetime.now()
 
 
     except(KeyboardInterrupt, SystemExit):
+        motp.running = False
+        motp.join()
         print "\nKilling Threads..."
         motd = False
