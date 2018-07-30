@@ -51,6 +51,7 @@ class MotionPoller(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         global motd
+        global GYRx, GYRy, GYRz, ACCx, ACCy, ACCz, TEMP
         self.current_value = None
         motd = True
 
