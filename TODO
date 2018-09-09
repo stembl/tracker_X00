@@ -1,0 +1,91 @@
+# To DO
+
+## Goals
+* Perform tasks simultaneously on a RPi0 using Dask.
+* Pull acceleration data, analyze and filter data, save results to a file.
+* Pull GPS and cell data, save results to file.  Correlate with accel data.
+
+## Questions
+* What data collection rate do I need to calculate 1-200 Hz effectively?
+* How often can the RPi0 poll acceleration data and still perform
+remaining calculations
+* What size temp data window is appropriate for the calculations required?
+  * Can this be dynamically calculated?
+* How often does the GPS need to be polled?
+  * Do we want to estimate truck speed? If so we may need to poll the GPS more
+  often.
+  * Relate the GPS accuracy to the expected max speed for a polling frequency.
+  * Add features to handle failures to pull gps data
+  * Set time to GPS time when GPS pull successful?
+* angle
+  * At what frequency can we calculate the angle?  Every window?
+  * Can I calculate the angle and remove gravity with every data pull?
+* Do I want a rolling window? Do I want discrete windows?  Do I want to to
+poll without saving to file?
+
+## Program Outline
+
+### Temp Data Collection
+Pull data continuously and save it to a temp data file.  Review this file for
+data of interest and pull the window when flagged.  Save GPS data when flagged.
+Flags may be a max acceleration or a set time period.
+1. Start up tasks
+  1. Identify initial angle, r_0 = |rx|ry|rz|rm|
+2. Poll Time and Acceleration every [1 ms]
+  1. Temp. store Time and Accel.
+  2. After [3 s] start removing old data in temp file. One for one with new
+  data. Maintain a window of data.
+  3. Every [3 s] calculate angle during window.  Save to angle variable and use
+  as initial conditions for next calculation.
+  4. If Accel. is > max threshold pull window to Review file. This is performed
+  when a max accel. is set by the user.  Max accel. may vary with axis. Poll
+  GPS and save to file. Save Angle.
+  5. After [X s] pull window to Review file.  This is performed when timed
+  data is requested by user.
+  6. If Angle is > max angle, pull window to
+  Review file.  This is performed with max angle is set by user. Poll GPS and
+  save to file.
+3. Accel Threshold
+  1. If Accel. is > max threshold wait [2 s] pull window to Review file.
+  This is performed
+  when a max accel. is set by the user.  Max accel. may vary with axis.
+  2. Poll GPS and save to file.
+  3. Save Angle.
+  4. When data is pulled to review file, pause review process until window is
+  filled again.  Prevent pulling data from same time set.  Timed data > temp
+  window size.
+4. Timed Data [X s]
+  1. After [X s] pull window to Review file.  This is performed when timed
+  data is requested by user.
+  2. Calculate the max angle in the window. Save angle.
+  3. Pull and save GPS data.
+  4. When data is pulled to review file, pause review process until window is
+  filled again.  Prevent pulling data from same time set.  Timed data > temp
+  window size.
+5. Angle Threshold
+  1. If Angle is > max angle, wait [2 s], pull window to
+  Review file.  This is performed with max angle is set by user. Poll GPS and
+  save to file.
+  2. Calculate the max angle in the window. Save angle.
+  3. Pull and save GPS data.
+  4. When data is pulled to review file, pause review process until window is
+  filled again.  Prevent pulling data from same time set.  Timed data > temp
+  window size.
+
+
+Temp Data Format:
+| time | ax | ay | az | gx | gy | gz | temp |
+
+GPS Data Format:
+| utc | lat | lon |
+
+Angle Data Format:
+| rx | ry | rz | rm |
+
+### Review Data
+Manage the data pulled from the temp data collection.  This is the data of
+interest.  We want to minimize the file size of this data while keeping
+calculation time below the window size.  Calculations should be performed, while
+still polling data continuously, and be completed before the next data set can
+be collected.  Include a safety factor.
+save file of this data.
