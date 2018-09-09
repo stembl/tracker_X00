@@ -33,22 +33,22 @@ def print_accel():
     """
 
 
-sensor = mpu6050(0x68)
+    sensor = mpu6050(0x68)
 
-while True:
-    accel_data = sensor.get_accel_data(g=True)
-    gyro_data = sensor.get_gyro_data()
-    temp = sensor.get_temp()
+    while True:
+        accel_data = sensor.get_accel_data(g=True)
+        gyro_data = sensor.get_gyro_data()
+        temp = sensor.get_temp()
 
-    print("\n\nAccelerometer Data [g]")
-    print("x: " + str(accel_data['x']))
-    print("y: " + str(accel_data['y']))
-    print("z: " + str(accel_data['z']))
+        print("\n\nAccelerometer Data [g]")
+        print("x: " + str(accel_data['x']))
+        print("y: " + str(accel_data['y']))
+        print("z: " + str(accel_data['z']))
 
-    print("\nGyroscope Data")
-    print("x: " + str(gyro_data['x']))
-    print("y: " + str(gyro_data['y']))
-    print("z: " + str(gyro_data['z']))
+        print("\nGyroscope Data")
+        print("x: " + str(gyro_data['x']))
+        print("y: " + str(gyro_data['y']))
+        print("z: " + str(gyro_data['z']))
 
-    print("\nTemp [C]: " + str(temp) + " C")
-    sleep(0.5)
+        print("\nTemp [C]: " + str(temp) + " C")
+        sleep(0.5)
